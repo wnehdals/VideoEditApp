@@ -1,18 +1,19 @@
-package com.jdm.videoeditapp
+package com.jdm.videoeditapp.ui
 
 import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
-import androidx.appcompat.app.AppCompatActivity
-import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
+import com.jdm.videoeditapp.R
 import com.jdm.videoeditapp.base.BaseActivity
 import com.jdm.videoeditapp.databinding.ActivityMainBinding
-import com.jdm.videoeditapp.ui.VideoEditActivity
+import com.jdm.videoeditapp.ui.media.MediaSourceActivity
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : BaseActivity<ActivityMainBinding>() {
     override val layoutId: Int
         get() = R.layout.activity_main
@@ -61,7 +62,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
 
     }
     fun goToVideoEditActivity() {
-        Intent(this, VideoEditActivity::class.java).run { startActivity(this) }
+        Intent(this, MediaSourceActivity::class.java).run { startActivity(this) }
     }
     fun requestStoragePermission() {
         requestStoragePermissionLauncher.launch(storagePermissions)
