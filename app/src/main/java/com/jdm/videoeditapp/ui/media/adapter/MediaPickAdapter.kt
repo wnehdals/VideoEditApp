@@ -7,19 +7,18 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.jdm.videoeditapp.databinding.ItemPickPhotoBinding
-import com.jdm.videoeditapp.model.BaseMedia
-import com.jdm.videoeditapp.model.Photo
-import com.jdm.videoeditapp.model.Video
-import dagger.hilt.android.AndroidEntryPoint
+import com.jdm.videoeditapp.model.MediaType
+import com.jdm.videoeditapp.model.SourceMedia
+import com.jdm.videoeditapp.util.TimeUtil
 
 
 class MediaPickAdapter(
-    private val context: Context
-    //private val onClickImageView: (BaseMedia, Int) -> Unit = { selectedItem, position -> },
+    private val context: Context,
+    private val onClickImageView: (SourceMedia, Int) -> Unit = { sourceMedia, position -> }
     //private val onClickSelectNum: (BaseMedia, Int) -> Unit = { selectedItem, position -> },
     //private val showLimitDialog: () -> Unit = {}
 ) : RecyclerView.Adapter<MediaPickAdapter.ViewHolder>() {
-    val mediaList = mutableListOf<BaseMedia>()
+    val mediaList = mutableListOf<SourceMedia>()
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(
             ItemPickPhotoBinding.inflate(
@@ -40,20 +39,32 @@ class MediaPickAdapter(
     override fun getItemCount(): Int {
         return mediaList.size
     }
-    fun addData(data: MutableList<Video>) {
+    fun addData(data: MutableList<SourceMedia>) {
+        mediaList.clear()
         mediaList.addAll(data)
         notifyDataSetChanged()
     }
 
     inner class ViewHolder(val binding: ItemPickPhotoBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(item: BaseMedia, position: Int) {
-            if (item is Video) {
-                Log.e("jdm_tag", "video")
-            } else if (item is Photo) {
-                Log.e("jdm_tag", "photo")
+        fun bind(item: SourceMedia, position: Int) {
+            when (item.type) {
+                MediaType.VIDEO -> {
+                    Glide.with(context).load(item.uri).into(binding.itemGalleryImg)
+                    binding.itemPickPhotoDurationTv.text = TimeUtil.intToHourFormat(item.duration)
+                }
+                MediaType.GIF -> {
+                    Glide.with(context).load(item.uri).into(binding.itemGalleryImg)
+                }
+                MediaType.PHOTO -> {
+                    Glide.with(context).load(item.uri).into(binding.itemGalleryImg)
+                }
+                else -> return
             }
-            Glide.with(context).load(item.uri).into(binding.itemGalleryImg)
+            binding.itemGalleryImg.setOnClickListener {
+                onClickImageView(item, position)
+            }
+
 
 
         }

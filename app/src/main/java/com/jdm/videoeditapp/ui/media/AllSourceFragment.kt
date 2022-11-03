@@ -6,6 +6,7 @@ import com.google.android.material.tabs.TabLayout.OnTabSelectedListener
 import com.jdm.videoeditapp.R
 import com.jdm.videoeditapp.base.BaseFragment
 import com.jdm.videoeditapp.databinding.FragmentAllSourceBinding
+import com.jdm.videoeditapp.model.SourceMedia
 import com.jdm.videoeditapp.ui.media.adapter.MediaPickAdapter
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -15,27 +16,34 @@ class AllSourceFragment : BaseFragment<FragmentAllSourceBinding>() {
         get() = R.layout.fragment_all_source
     private val viewModel: SourceViewModel by hiltNavGraphViewModels(R.id.source)
     private val mediaPickAdapter by lazy {
-        MediaPickAdapter(requireContext())
+        MediaPickAdapter(
+            requireContext(),
+            this::onClickImageView
+        )
     }
+
     override fun initView() {
         with(binding) {
             mediaSourceRv.adapter = mediaPickAdapter
 
-            mediaSourceTl.addOnTabSelectedListener(object : OnTabSelectedListener{
+            mediaSourceTl.addOnTabSelectedListener(object : OnTabSelectedListener {
                 override fun onTabSelected(tab: TabLayout.Tab?) {
                     if (tab != null) {
-                        when(tab.position) {
+                        when (tab.position) {
                             0 -> {
-                                viewModel.getVideoList()
+                                mediaPickAdapter.addData(viewModel.totalSourceList)
                             }
                             1 -> {
-
+                                mediaPickAdapter.addData(viewModel.videoSourceList)
                             }
                             2 -> {
-
+                                mediaPickAdapter.addData(viewModel.photoSourceList)
+                            }
+                            3 -> {
+                                mediaPickAdapter.addData(viewModel.gifSourceList)
                             }
                             else -> {
-
+                                return
                             }
                         }
                     }
@@ -47,6 +55,8 @@ class AllSourceFragment : BaseFragment<FragmentAllSourceBinding>() {
                 override fun onTabReselected(tab: TabLayout.Tab?) {
                 }
             })
+
+
             var t = mediaSourceTl.getTabAt(0)
             t?.select()
             viewModel.getVideoList()
@@ -56,13 +66,17 @@ class AllSourceFragment : BaseFragment<FragmentAllSourceBinding>() {
 
     override fun subscribe() {
         with(viewModel) {
-            videoData.observe(viewLifecycleOwner) {
+            sourceData.observe(viewLifecycleOwner) {
                 mediaPickAdapter.addData(it)
             }
         }
     }
 
     override fun initEvent() {
+    }
+
+    private fun onClickImageView(sourceMedia: SourceMedia, position: Int) {
+
     }
 
     companion object {
