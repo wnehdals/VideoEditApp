@@ -16,4 +16,15 @@ object TimeUtil {
         formatBuilder.setLength(0)
         return formatter.format("%02d:%02d:%02d", hours, minutes, seconds).toString()
     }
+    fun getTimeFormatString(timeMs: Int): String {
+        var timeMs = timeMs
+        val formatBuilder = StringBuilder()
+        val formatter = Formatter(formatBuilder, Locale.getDefault())
+        val totalSeconds = timeMs
+        val hours = totalSeconds / 3600
+        val minutes = (totalSeconds - (hours * 3600)) / 60
+        val seconds = (totalSeconds - (hours * 3600) - (minutes * 60))
+        formatBuilder.setLength(0)
+        return formatter.format("%02d:%02d:%02d", hours, minutes, seconds).toString()
+    }
 }

@@ -28,6 +28,9 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
     }
     private val requestStoragePermissionLauncher = registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) {
         var permissionFlag = true
+        if (it[Manifest.permission.READ_EXTERNAL_STORAGE] == true) {
+
+        }
         for (entry in it.entries) {
             if (!entry.value) {
                 permissionFlag = false

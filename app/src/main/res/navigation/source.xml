@@ -7,7 +7,15 @@
     <fragment
         android:id="@+id/AllSourceFragment"
         android:name="com.jdm.videoeditapp.ui.media.AllSourceFragment"
-        tools:layout="@layout/fragment_all_source"/>
+        tools:layout="@layout/fragment_all_source">
+        <action
+            android:id="@+id/action_AllSourceFragment_to_VideoEditFragment"
+            app:destination="@id/VideoEditFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/VideoEditFragment"
+        android:name="com.jdm.videoeditapp.ui.media.VideoEditFragment"
+        tools:layout="@layout/fragment_video_edit"/>
 
 
 </navigation>

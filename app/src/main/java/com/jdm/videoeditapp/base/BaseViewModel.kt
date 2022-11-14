@@ -9,6 +9,7 @@ import kotlinx.coroutines.CoroutineExceptionHandler
 open class BaseViewModel: ViewModel() {
     open var ceh = CoroutineExceptionHandler { coroutineContext, throwable ->
         _toast.value = throwable.message
+        _loading.value = false
     }
     open val _toast = MutableLiveData<String>()
     val toast: LiveData<String> get() = _toast
